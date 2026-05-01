@@ -1,10 +1,16 @@
 const express = require('express');
+const cors = require('cors');
 const webhookRoutes = require('./routes/webhookRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 
-// Middleware to parse JSON payloads from GitHub webhooks
+// Middleware
+app.use(cors());
 app.use(express.json());
+
+// Routes
+app.use('/api/auth', authRoutes);
 
 // Main webhook route
 app.use('/webhook', webhookRoutes);

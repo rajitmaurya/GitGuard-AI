@@ -9,10 +9,16 @@ const Signup = () => {
   const { signup } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (signup(username, email, password)) {
+    setError('');
+    try {
+      await signup(username, email, password);
       navigate('/');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to sign up. Please try again.');
     }
   };
 
@@ -21,6 +27,7 @@ const Signup = () => {
       <div className="login-card glassmorphism">
         <h2 className="login-title">Join GitGuard AI</h2>
         <p className="login-subtitle">Create a new account</p>
+        {error && <div className="error-message">{error}</div>}
         <form onSubmit={handleSubmit} className="login-form">
           <div className="input-group">
             <label htmlFor="username">Username</label>

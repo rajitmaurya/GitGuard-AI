@@ -8,10 +8,16 @@ const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (login(username, password)) {
+    setError('');
+    try {
+      await login(username, password);
       navigate('/');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to login. Please check your credentials.');
     }
   };
 
@@ -20,6 +26,7 @@ const Login = () => {
       <div className="login-card glassmorphism">
         <h2 className="login-title">Welcome to GitGuard AI</h2>
         <p className="login-subtitle">Sign in to your account</p>
+        {error && <div className="error-message">{error}</div>}
         <form onSubmit={handleSubmit} className="login-form">
           <div className="input-group">
             <label htmlFor="username">Username</label>

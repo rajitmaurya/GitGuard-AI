@@ -65,9 +65,19 @@ const safeHTML = DOMPurify.sanitize(userInput);
 
 const api = axios.create({
   // Base URL for the backend API
-  // Change this to your actual backend URL when running the server
-  baseURL: 'http://localhost:5000/api', 
+  baseURL: 'http://localhost:3000/api', 
 });
+
+// Auth functions
+export const authSignup = async (userData) => {
+  const response = await api.post('/auth/signup', userData);
+  return response.data;
+};
+
+export const authLogin = async (credentials) => {
+  const response = await api.post('/auth/login', credentials);
+  return response.data;
+};
 
 export const getReviews = async () => {
   try {

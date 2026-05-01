@@ -1,30 +1,49 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import { authLogin, authSignup } from '../services/api';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  const login = (username, password) => {
-    // Mock login logic - in a real app, you would make an API call here
-    if (username) {
-      setUser({ username });
-      return true;
+  useEffect(() => {
+    // Check local storage for user token on load
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
     }
-    return false;
+  }, []);
+
+  const login = async (username, password) => {
+    try {
+      const data = await authLogin({ username, password });
+      setUser(data.user);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      localStorage.setItem('token', data.token);
+      return true;
+    } catch (error) {
+      console.error("Login Error:", error);
+      throw error;
+    }
   };
 
-  const signup = (username, email, password) => {
-    // Mock signup logic
-    if (username && email && password) {
-      setUser({ username, email });
+  const signup = async (username, email, password) => {
+    try {
+      const data = await authSignup({ username, email, password });
+      setUser(data.user);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      localStorage.setItem('token', data.token);
       return true;
+    } catch (error) {
+      console.error("Signup Error:", error);
+      throw error;
     }
-    return false;
   };
 
   const logout = () => {
     setUser(null);
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
   };
 
   return (

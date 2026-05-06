@@ -5,6 +5,7 @@ import Details from './pages/Details';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import Navbar from './components/Navbar';
 
 const ProtectedRoute = ({ children }) => {
   const { user } = useAuth();
@@ -44,6 +45,7 @@ function App() {
     <AuthProvider>
       <Router>
         <div className="app">
+          <Navbar />
           <main className="main-content">
             <AppRoutes />
           </main>

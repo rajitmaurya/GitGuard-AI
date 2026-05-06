@@ -3,10 +3,8 @@ import { getReviews } from '../services/api';
 import ReviewCard from '../components/ReviewCard';
 import FilterBar from '../components/FilterBar';
 import ToggleSwitch from '../components/ToggleSwitch';
-import { useAuth } from '../context/AuthContext';
 
 const Dashboard = () => {
-  const { user, logout } = useAuth();
   const [reviews, setReviews] = useState([]);
   const [filteredReviews, setFilteredReviews] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -56,13 +54,7 @@ const Dashboard = () => {
   return (
     <div className="dashboard-container">
       <header className="dashboard-header">
-        <div className="header-top">
-          <div className="user-info">
-            <span className="user-greeting">Hello, <strong>{user?.username}</strong></span>
-          </div>
-          <button onClick={logout} className="logout-btn">Logout</button>
-        </div>
-        <h1>GitGuard AI Dashboard</h1>
+        <h1>Dashboard</h1>
         <p className="subtitle">AI-generated code reviews for your Pull Requests</p>
       </header>
 
